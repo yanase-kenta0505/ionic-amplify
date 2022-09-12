@@ -18,16 +18,16 @@
         <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p> -->
         <ion-card>
           <ion-card-header>
-            <h3>タスク追加</h3>
+            タスク追加
           </ion-card-header>
 
          <ion-card-content>
           <ion-item-group>
             <ion-item>
               <ion-label position="floating">TaskName</ion-label>
-              <ion-input type="text"></ion-input>
+              <ion-input type="text" v-model="taskname"></ion-input>
             </ion-item>
-            <ion-button>
+            <ion-button @click="addTask">
               追加
             </ion-button>
           </ion-item-group>
@@ -40,7 +40,9 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem, IonLabel, IonCard, IonCardHeader, IonCardContent, IonItemGroup, IonButton } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import { API } from 'aws-amplify';
+import { createTodo } from '../graphql/mutations'
 
 export default defineComponent({
   name: 'HomePage',
@@ -58,6 +60,22 @@ export default defineComponent({
     IonCardContent,
     IonItemGroup,
     IonButton
+  },
+  setup() {
+    const taskname = ref('')
+    const addTask = async () => {
+      if (!taskname.value) return
+      await API.graphql({
+        query: createTodo,
+        variables: { input: { "name": taskname.value}}
+      })
+      taskname.value = ''
+    }
+
+    return {
+      taskname,
+      addTask
+    }
   }
 });
 </script>
