@@ -14,15 +14,32 @@
       </ion-header>
     
       <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+        <!-- <strong>Ready to create an app?</strong>
+        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p> -->
+        <ion-card>
+          <ion-card-header>
+            <h3>タスク追加</h3>
+          </ion-card-header>
+
+         <ion-card-content>
+          <ion-item-group>
+            <ion-item>
+              <ion-label position="floating">TaskName</ion-label>
+              <ion-input type="text"></ion-input>
+            </ion-item>
+            <ion-button>
+              追加
+            </ion-button>
+          </ion-item-group>
+         </ion-card-content>
+        </ion-card>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem, IonLabel, IonCard, IonCardHeader, IonCardContent, IonItemGroup, IonButton } from '@ionic/vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -32,7 +49,15 @@ export default defineComponent({
     IonHeader,
     IonPage,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    IonInput,
+    IonItem,
+    IonLabel,
+    IonCard,
+    IonCardHeader,
+    IonCardContent,
+    IonItemGroup,
+    IonButton
   }
 });
 </script>
@@ -65,4 +90,20 @@ export default defineComponent({
 #container a {
   text-decoration: none;
 }
+
+ion-item {
+  width: 300px; 
+}
+
+ion-item-group {
+  display: flex;
+  justify-content: center;
+}
+
+ion-button {
+  align-self: flex-end;
+  margin-left: 20px;
+}
+
+
 </style>
