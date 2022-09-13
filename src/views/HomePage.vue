@@ -74,9 +74,28 @@ export default defineComponent({
       taskname.value = ''
     }
 
+    const onSubscription =  (async (user) => {
+      const subscription = await API.graphql(graphqlOperation(onCreateTodo, {owner: "user.username"}))
+      if ("subscribe" in subscription) {
+        subscription.subscribe({
+          next: (value) => {
+            console.log(value)
+          }
+        })
+      }
+      // const subscription = await API.graphql(graphqlOperation(onCreateTodo)).subscribe({
+      //   next: ({p})
+      // })
+      
+      console.log(subscription)
+    })()
+
+    
+
     return {
       taskname,
-      addTask
+      addTask,
+      onSubscription
     }
   }
 });
