@@ -50,6 +50,7 @@ import { createTodo } from '../graphql/mutations'
 import { onCreateTodo } from '@/graphql/subscriptions';
 import { Authenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
+import { Auth } from 'aws-amplify';
 
 export default defineComponent({
   name: 'HomePage',
@@ -69,7 +70,7 @@ export default defineComponent({
     IonButton,
     Authenticator
   },
-  setup() {
+   setup() {
     const taskname = ref('')
     const addTask = async () => {
       if (!taskname.value) return
@@ -77,25 +78,28 @@ export default defineComponent({
       taskname.value = ''
     }
 
-    // const onSubscription =  (async (user) => {
-    //   const subscription = await API.graphql(graphqlOperation(onCreateTodo, {owner: "user.username"}))
-    //   if ("subscribe" in subscription) {
-    //     subscription.subscribe({
-    //       next: (value) => {
-    //         console.log(value)
-    //       }
-    //     })
-    //   }
+    // const loginUser = async () => { 
+    //  return await Auth.currentSession()
+    // }
+    // console.log(loginUser)
+
+    const onSubscription =  (async () => {
+      const subscription = API.graphql(graphqlOperation(onCreateTodo))
+      if ("subscribe" in subscription) {
+        subscription.subscribe({
+          next: (value) => {
+            console.log(value)
+          }
+        })
+      }
       
-    //   console.log(subscription)
-    // })()
+    })()
 
     
 
     return {
       taskname,
-      addTask,
-      // onSubscription
+      addTask
     }
   }
 });
