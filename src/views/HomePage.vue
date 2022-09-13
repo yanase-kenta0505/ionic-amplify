@@ -1,41 +1,45 @@
 <template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
+  <authenticator>
+    <template v-slot="{ signOut }">
+    <ion-page>
+      <ion-header :translucent="true">
         <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
+          <ion-title>Blank</ion-title>
         </ion-toolbar>
       </ion-header>
     
-      <div id="container">
-        <!-- <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p> -->
-        <ion-card>
-          <ion-card-header>
-            タスク追加
-          </ion-card-header>
-
-         <ion-card-content>
-          <ion-item-group>
-            <ion-item>
-              <ion-label position="floating">TaskName</ion-label>
-              <ion-input type="text" v-model="taskname"></ion-input>
-            </ion-item>
-            <ion-button @click="addTask">
-              追加
-            </ion-button>
-          </ion-item-group>
-         </ion-card-content>
-        </ion-card>
-      </div>
-    </ion-content>
-  </ion-page>
+      <ion-content :fullscreen="true">
+        <ion-header collapse="condense">
+          <ion-toolbar>
+            <ion-title size="large">Blank</ion-title>
+          </ion-toolbar>
+        </ion-header>
+      
+        <div id="container">
+          <ion-card>
+            <ion-card-header>
+              タスク追加
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item-group>
+                <ion-item>
+                  <ion-label position="floating">TaskName</ion-label>
+                  <ion-input type="text" v-model="taskname"></ion-input>
+                </ion-item>
+                <ion-button @click="addTask">
+                  追加
+                </ion-button>
+                <ion-button @click="signOut">
+                  サインアウト
+                </ion-button>
+              </ion-item-group>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ion-content>
+    </ion-page>
+    </template>
+  </authenticator>
 </template>
 
 <script lang="ts">
@@ -44,6 +48,8 @@ import { defineComponent, ref } from 'vue';
 import { API, graphqlOperation } from 'aws-amplify';
 import { createTodo } from '../graphql/mutations'
 import { onCreateTodo } from '@/graphql/subscriptions';
+import { Authenticator } from "@aws-amplify/ui-vue";
+import "@aws-amplify/ui-vue/styles.css";
 
 export default defineComponent({
   name: 'HomePage',
@@ -60,42 +66,36 @@ export default defineComponent({
     IonCardHeader,
     IonCardContent,
     IonItemGroup,
-    IonButton
+    IonButton,
+    Authenticator
   },
   setup() {
     const taskname = ref('')
     const addTask = async () => {
       if (!taskname.value) return
-      // await API.graphql({
-      //   query: createTodo,
-      //   variables: { input: { "name": taskname.value}}
-      // })
       await API.graphql(graphqlOperation(createTodo,  {input: {"name": taskname.value}}))
       taskname.value = ''
     }
 
-    const onSubscription =  (async (user) => {
-      const subscription = await API.graphql(graphqlOperation(onCreateTodo, {owner: "user.username"}))
-      if ("subscribe" in subscription) {
-        subscription.subscribe({
-          next: (value) => {
-            console.log(value)
-          }
-        })
-      }
-      // const subscription = await API.graphql(graphqlOperation(onCreateTodo)).subscribe({
-      //   next: ({p})
-      // })
+    // const onSubscription =  (async (user) => {
+    //   const subscription = await API.graphql(graphqlOperation(onCreateTodo, {owner: "user.username"}))
+    //   if ("subscribe" in subscription) {
+    //     subscription.subscribe({
+    //       next: (value) => {
+    //         console.log(value)
+    //       }
+    //     })
+    //   }
       
-      console.log(subscription)
-    })()
+    //   console.log(subscription)
+    // })()
 
     
 
     return {
       taskname,
       addTask,
-      onSubscription
+      // onSubscription
     }
   }
 });
