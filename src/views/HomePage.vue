@@ -41,8 +41,9 @@
 <script lang="ts">
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem, IonLabel, IonCard, IonCardHeader, IonCardContent, IonItemGroup, IonButton } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
-import { API } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import { createTodo } from '../graphql/mutations'
+import { onCreateTodo } from '@/graphql/subscriptions';
 
 export default defineComponent({
   name: 'HomePage',
@@ -65,10 +66,11 @@ export default defineComponent({
     const taskname = ref('')
     const addTask = async () => {
       if (!taskname.value) return
-      await API.graphql({
-        query: createTodo,
-        variables: { input: { "name": taskname.value}}
-      })
+      // await API.graphql({
+      //   query: createTodo,
+      //   variables: { input: { "name": taskname.value}}
+      // })
+      await API.graphql(graphqlOperation(createTodo,  {input: {"name": taskname.value}}))
       taskname.value = ''
     }
 
