@@ -23,7 +23,6 @@
             <ion-card-content>
               <ion-item-group>
                 <ion-item>
-                  <ion-label position="floating">TaskName</ion-label>
                   <ion-input type="text" v-model="taskname"></ion-input>
                 </ion-item>
                 <ion-button @click="addTask">
@@ -33,6 +32,11 @@
                   サインアウト
                 </ion-button>
               </ion-item-group>
+              <div style="width: 300px; height: auto; background-color: aquamarine; margin: auto;">
+                <ul>
+                  <li v-for="(todo, index) in todos" :key="index">{{todo.name}}</li>
+                </ul>
+              </div>
             </ion-card-content>
           </ion-card>
         </div>
@@ -43,14 +47,14 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem, IonLabel, IonCard, IonCardHeader, IonCardContent, IonItemGroup, IonButton } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem, IonCard, IonCardHeader, IonCardContent, IonItemGroup, IonButton } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { API, graphqlOperation } from 'aws-amplify';
 import { createTodo } from '../graphql/mutations'
 import { onCreateTodo } from '@/graphql/subscriptions';
 import { Authenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
-import { Auth } from 'aws-amplify';
+import { OnCreateTodoSubscription, Todo } from '../API'
 
 export default defineComponent({
   name: 'HomePage',
@@ -62,7 +66,6 @@ export default defineComponent({
     IonToolbar,
     IonInput,
     IonItem,
-    IonLabel,
     IonCard,
     IonCardHeader,
     IonCardContent,
@@ -71,24 +74,24 @@ export default defineComponent({
     Authenticator
   },
    setup() {
+    type OnCreateTodoSubscriptions = {value: {data: OnCreateTodoSubscription}}
     const taskname = ref('')
+    const todos = ref<Todo[]>([])
     const addTask = async () => {
       if (!taskname.value) return
       await API.graphql(graphqlOperation(createTodo,  {input: {"name": taskname.value}}))
       taskname.value = ''
     }
 
-    // const loginUser = async () => { 
-    //  return await Auth.currentSession()
-    // }
-    // console.log(loginUser)
-
-    const onSubscription =  (async () => {
+     (() => {
       const subscription = API.graphql(graphqlOperation(onCreateTodo))
       if ("subscribe" in subscription) {
         subscription.subscribe({
-          next: (value) => {
-            console.log(value)
+          next: ({value: {data}}: OnCreateTodoSubscriptions)=> {
+            if (data.onCreateTodo) {
+              const todo: Todo = data.onCreateTodo
+              todos.value.push(todo)
+            }
           }
         })
       }
@@ -99,7 +102,8 @@ export default defineComponent({
 
     return {
       taskname,
-      addTask
+      addTask,
+      todos
     }
   }
 });

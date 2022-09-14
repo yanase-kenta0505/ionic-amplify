@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'ionic-amplify',
+  appId: 'test.test.yanase',
+  appName: 'ionic-amplify-test-yanase',
   webDir: 'dist',
   bundledWebRuntime: false
 };
