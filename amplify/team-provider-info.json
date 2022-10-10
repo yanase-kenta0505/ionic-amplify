@@ -14,6 +14,20 @@
     "categories": {
       "auth": {
         "ionicamplifydeb6a2d4": {}
+      },
+      "function": {
+        "ionicamplify492096d6": {
+          "deploymentBucketName": "amplify-ionicamplify-dev-105847-deployment",
+          "s3Key": "amplify-builds/ionicamplify492096d6-54772f75342f317a7241-build.zip"
+        },
+        "addfunction": {
+          "deploymentBucketName": "amplify-ionicamplify-dev-105847-deployment",
+          "s3Key": "amplify-builds/addfunction-4658493932676e335235-build.zip"
+        },
+        "echofunction": {
+          "deploymentBucketName": "amplify-ionicamplify-dev-105847-deployment",
+          "s3Key": "amplify-builds/echofunction-78516d5356765951362f-build.zip"
+        }
       }
     }
   }

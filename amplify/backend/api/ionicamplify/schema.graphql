@@ -6,4 +6,25 @@ type Todo @model {
   id: ID!
   name: String!
   description: String
+  owner: String!
+}
+
+type Post @model {
+  id: ID!
+  title: String!
+  content: String!
+  publishedAt: AWSDateTime
+}
+
+type Subscription {
+  onCrateByOwnername(owner: String!) : Todo
+    @aws_subscribe(mutations: ["createTodo"])
+}
+
+type Query {
+  echo(msg: String): String @function(name: "echofunction-${env}")
+}
+
+type Mutation {
+  add(number1: Int, number2: Int): Int @function(name: "addfunction-${env}")
 }

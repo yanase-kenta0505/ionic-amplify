@@ -6,11 +6,13 @@ export type CreateTodoInput = {
   id?: string | null,
   name: string,
   description?: string | null,
+  owner: string,
 };
 
 export type ModelTodoConditionInput = {
   name?: ModelStringInput | null,
   description?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
   and?: Array< ModelTodoConditionInput | null > | null,
   or?: Array< ModelTodoConditionInput | null > | null,
   not?: ModelTodoConditionInput | null,
@@ -61,6 +63,7 @@ export type Todo = {
   id: string,
   name: string,
   description?: string | null,
+  owner: string,
   createdAt: string,
   updatedAt: string,
 };
@@ -69,9 +72,47 @@ export type UpdateTodoInput = {
   id: string,
   name?: string | null,
   description?: string | null,
+  owner?: string | null,
 };
 
 export type DeleteTodoInput = {
+  id: string,
+};
+
+export type CreatePostInput = {
+  id?: string | null,
+  title: string,
+  content: string,
+  publishedAt?: string | null,
+};
+
+export type ModelPostConditionInput = {
+  title?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  publishedAt?: ModelStringInput | null,
+  and?: Array< ModelPostConditionInput | null > | null,
+  or?: Array< ModelPostConditionInput | null > | null,
+  not?: ModelPostConditionInput | null,
+};
+
+export type Post = {
+  __typename: "Post",
+  id: string,
+  title: string,
+  content: string,
+  publishedAt?: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdatePostInput = {
+  id: string,
+  title?: string | null,
+  content?: string | null,
+  publishedAt?: string | null,
+};
+
+export type DeletePostInput = {
   id: string,
 };
 
@@ -79,6 +120,7 @@ export type ModelTodoFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
   description?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
   and?: Array< ModelTodoFilterInput | null > | null,
   or?: Array< ModelTodoFilterInput | null > | null,
   not?: ModelTodoFilterInput | null,
@@ -106,42 +148,29 @@ export type ModelTodoConnection = {
   nextToken?: string | null,
 };
 
-export type ModelSubscriptionTodoFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  description?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionTodoFilterInput | null > | null,
-  or?: Array< ModelSubscriptionTodoFilterInput | null > | null,
+export type ModelPostFilterInput = {
+  id?: ModelIDInput | null,
+  title?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  publishedAt?: ModelStringInput | null,
+  and?: Array< ModelPostFilterInput | null > | null,
+  or?: Array< ModelPostFilterInput | null > | null,
+  not?: ModelPostFilterInput | null,
 };
 
-export type ModelSubscriptionIDInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
+export type ModelPostConnection = {
+  __typename: "ModelPostConnection",
+  items:  Array<Post | null >,
+  nextToken?: string | null,
 };
 
-export type ModelSubscriptionStringInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  in?: Array< string | null > | null,
-  notIn?: Array< string | null > | null,
+export type AddMutationVariables = {
+  number1?: number | null,
+  number2?: number | null,
+};
+
+export type AddMutation = {
+  add?: number | null,
 };
 
 export type CreateTodoMutationVariables = {
@@ -155,6 +184,7 @@ export type CreateTodoMutation = {
     id: string,
     name: string,
     description?: string | null,
+    owner: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -171,6 +201,7 @@ export type UpdateTodoMutation = {
     id: string,
     name: string,
     description?: string | null,
+    owner: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -187,9 +218,69 @@ export type DeleteTodoMutation = {
     id: string,
     name: string,
     description?: string | null,
+    owner: string,
     createdAt: string,
     updatedAt: string,
   } | null,
+};
+
+export type CreatePostMutationVariables = {
+  input: CreatePostInput,
+  condition?: ModelPostConditionInput | null,
+};
+
+export type CreatePostMutation = {
+  createPost?:  {
+    __typename: "Post",
+    id: string,
+    title: string,
+    content: string,
+    publishedAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdatePostMutationVariables = {
+  input: UpdatePostInput,
+  condition?: ModelPostConditionInput | null,
+};
+
+export type UpdatePostMutation = {
+  updatePost?:  {
+    __typename: "Post",
+    id: string,
+    title: string,
+    content: string,
+    publishedAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeletePostMutationVariables = {
+  input: DeletePostInput,
+  condition?: ModelPostConditionInput | null,
+};
+
+export type DeletePostMutation = {
+  deletePost?:  {
+    __typename: "Post",
+    id: string,
+    title: string,
+    content: string,
+    publishedAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type EchoQueryVariables = {
+  msg?: string | null,
+};
+
+export type EchoQuery = {
+  echo?: string | null,
 };
 
 export type GetTodoQueryVariables = {
@@ -202,6 +293,7 @@ export type GetTodoQuery = {
     id: string,
     name: string,
     description?: string | null,
+    owner: string,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -221,6 +313,7 @@ export type ListTodosQuery = {
       id: string,
       name: string,
       description?: string | null,
+      owner: string,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -228,8 +321,58 @@ export type ListTodosQuery = {
   } | null,
 };
 
-export type OnCreateTodoSubscriptionVariables = {
-  filter?: ModelSubscriptionTodoFilterInput | null,
+export type GetPostQueryVariables = {
+  id: string,
+};
+
+export type GetPostQuery = {
+  getPost?:  {
+    __typename: "Post",
+    id: string,
+    title: string,
+    content: string,
+    publishedAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListPostsQueryVariables = {
+  filter?: ModelPostFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListPostsQuery = {
+  listPosts?:  {
+    __typename: "ModelPostConnection",
+    items:  Array< {
+      __typename: "Post",
+      id: string,
+      title: string,
+      content: string,
+      publishedAt?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type OnCrateByOwnernameSubscriptionVariables = {
+  owner: string,
+};
+
+export type OnCrateByOwnernameSubscription = {
+  onCrateByOwnername?:  {
+    __typename: "Todo",
+    id: string,
+    name: string,
+    description?: string | null,
+    owner: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
 };
 
 export type OnCreateTodoSubscription = {
@@ -238,13 +381,10 @@ export type OnCreateTodoSubscription = {
     id: string,
     name: string,
     description?: string | null,
+    owner: string,
     createdAt: string,
     updatedAt: string,
   } | null,
-};
-
-export type OnUpdateTodoSubscriptionVariables = {
-  filter?: ModelSubscriptionTodoFilterInput | null,
 };
 
 export type OnUpdateTodoSubscription = {
@@ -253,13 +393,10 @@ export type OnUpdateTodoSubscription = {
     id: string,
     name: string,
     description?: string | null,
+    owner: string,
     createdAt: string,
     updatedAt: string,
   } | null,
-};
-
-export type OnDeleteTodoSubscriptionVariables = {
-  filter?: ModelSubscriptionTodoFilterInput | null,
 };
 
 export type OnDeleteTodoSubscription = {
@@ -268,6 +405,43 @@ export type OnDeleteTodoSubscription = {
     id: string,
     name: string,
     description?: string | null,
+    owner: string,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreatePostSubscription = {
+  onCreatePost?:  {
+    __typename: "Post",
+    id: string,
+    title: string,
+    content: string,
+    publishedAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdatePostSubscription = {
+  onUpdatePost?:  {
+    __typename: "Post",
+    id: string,
+    title: string,
+    content: string,
+    publishedAt?: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeletePostSubscription = {
+  onDeletePost?:  {
+    __typename: "Post",
+    id: string,
+    title: string,
+    content: string,
+    publishedAt?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
